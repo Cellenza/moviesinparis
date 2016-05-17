@@ -5,6 +5,9 @@ angular.module('app.around', [])
 
       var defer = $q.defer();
 
+      // defer.resolve([{
+      //   movieTitle: 'test Andrei'
+      // }]);
       $http.get('http://scenecity.azurewebsites.net/api/AroundMe/10/10')
         .then(function (res) {
 

@@ -1,8 +1,13 @@
 <ion-view title="Around me" id="page2" class=" " ng-init="load()">
-    <ion-content padding="true" class="has-header">
-        <ion-list >
+  <ion-content padding="true" class="has-header">
+    <div class="list">
 
-            <ion-item ng-repeat="movie in movies">{{ movie.movieTitle }}</ion-item>
-        </ion-list>
-    </ion-content>
+      <a class="item item-thumbnail-left" ng-repeat="movie in movies">
+        <img  src="{{ movie.photo}}" />
+        <h1>{{ movie.movieTitle }}</h1>
+        <p>à 100m</p>
+      </a>
+
+    </div>
+  </ion-content>
 </ion-view>

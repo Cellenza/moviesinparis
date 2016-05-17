@@ -20,19 +20,10 @@ namespace MoviesInParis
             "http://opendata.paris.fr/api/records/1.0/search/?dataset=tournagesdefilmsparis2011&facet=realisateur&facet=date_debut_evenement&facet=date_fin_evenement&facet=cadre&facet=lieu&facet=arrondissement";
 
         // GET api/values/5
-        [HttpGet("{longitude}/{latitude}")]
-        public async Task<List<MovieScene>> Get(double longitude, double latitude)
+        [HttpGet("{longitude}/{latitude}/{theme}")]
+        public async Task<List<MovieScene>> Get(double longitude, double latitude, string theme)
         {
-            using (var client = new HttpClient())
-            {
-                var parisDataString = await client.GetStringAsync(Uri);
-                var record = JsonConvert.DeserializeObject<ParisData>(parisDataString);
-
-                var movieScenes = from r in record.Records select new MovieScene() { MovieTitle = r.fields.titre };
-
-                return movieScenes.ToList();
-            }
-
+            return (await GetMovies()).Select(m => SetDistance(m, longitude, latitude)).ToList();
 
             //return new List<MovieScene>()
             //           {
@@ -57,6 +48,31 @@ namespace MoviesInParis
             //                       Street = "156 boulevard hausseman"
             //                   }
             //           };
+        }
+
+        private MovieScene SetDistance(MovieScene movieScene, double longitude, double latitude)
+        {
+            return movieScene;
+        }
+
+        private static async Task<List<MovieScene>> GetMovies()
+        {
+            using (var client = new HttpClient())
+            {
+                var parisDataString = await client.GetStringAsync(Uri);
+                var record = JsonConvert.DeserializeObject<ParisData>(parisDataString);
+
+                var movieScenes = from r in record.Records
+                                  select
+                                      new MovieScene()
+                                          {
+                                              MovieTitle = r.fields.titre,
+                                              //Longitude = r.fields.Longitude,
+                                              //Latitude = r.fields.Latitude,
+                                          };
+
+                return movieScenes.ToList();
+            }
         }
     }
 

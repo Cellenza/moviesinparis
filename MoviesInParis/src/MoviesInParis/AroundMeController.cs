@@ -12,8 +12,8 @@ namespace MoviesInParis
     public class AroundMeController : Controller
     {
         // GET api/values/5
-        [HttpGet("{longitude}/{latitude}/{theme}")]
-        public List<MovieScene> Get(double longitude, double latitude, string theme)
+        [HttpGet("{longitude}/{latitude}")]
+        public List<MovieScene> Get(double longitude, double latitude)
         {
             return new List<MovieScene>()
                        {

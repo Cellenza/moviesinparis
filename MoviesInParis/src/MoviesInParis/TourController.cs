@@ -65,11 +65,11 @@ namespace MoviesInParis
                 var movieScenes = from r in record.Records
                                   select
                                       new MovieScene()
-                                          {
-                                              MovieTitle = r.fields.titre,
-                                              //Longitude = r.fields.Longitude,
-                                              //Latitude = r.fields.Latitude,
-                                          };
+                                      {
+                                          MovieTitle = r.fields.titre,
+                                          Longitude = (double)r.fields?.geo_coordinates[0],
+                                          Latitude = (double)r.fields?.geo_coordinates[1],
+                                      };
 
                 return movieScenes.ToList();
             }
@@ -88,6 +88,8 @@ namespace MoviesInParis
 
     public class ParisField
     {
+        public double[] geo_coordinates;
+
         public string titre { get; set; }
     }
 }

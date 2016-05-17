@@ -30,10 +30,10 @@ namespace MoviesInParis
                               if (imdb != null)
                               {
                                   m.ImdbUrl = imdb.Poster ?? m.ImdbUrl;
-                                  m.Director = imdb.Director ?? imdb.Director;
-                                  m.Summary = imdb.Plot ?? imdb.Plot;
-                                  m.Year = imdb.Year ?? imdb.Year;
-                                  m.MovieTitle = imdb.Title ?? imdb.Title;
+                                  m.Director = imdb.Director ?? m.Director;
+                                  m.Summary = imdb.Plot ?? m.Summary;
+                                  m.Year = imdb.Year ?? m.Year;
+                                  m.MovieTitle = imdb.Title ?? m.MovieTitle;
                               }
 
                               return m;

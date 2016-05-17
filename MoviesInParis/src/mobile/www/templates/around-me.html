@@ -1,9 +1,13 @@
-<ion-view title="Around me" id="page2" class=" ">
-    <ion-content padding="true" class="has-header">
-        <ion-list id="cameraTabDefaultPage-list1" class=" ">
-            <ion-item id="cameraTabDefaultPage-list-item1" class="  ">Item 1</ion-item>
-            <ion-item id="cameraTabDefaultPage-list-item2" class="  ">Item 2</ion-item>
-            <ion-item id="cameraTabDefaultPage-list-item3" class="  ">Item 3</ion-item>
-        </ion-list>
-    </ion-content>
+<ion-view title="Around me" id="page2" class=" " ng-init="load()">
+  <ion-content padding="true" class="has-header">
+    <div class="list">
+
+      <a class="item item-thumbnail-left" ng-repeat="movie in movies">
+        <img  src="{{ movie.photo}}" />
+        <h1>{{ movie.movieTitle }}</h1>
+        <p>à 100m</p>
+      </a>
+
+    </div>
+  </ion-content>
 </ion-view>

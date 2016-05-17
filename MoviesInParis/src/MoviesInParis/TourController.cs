@@ -27,36 +27,41 @@ namespace MoviesInParis
         [HttpGet("{longitude}/{latitude}/{theme}")]
         public async Task<List<MovieScene>> Get(double longitude, double latitude, string theme)
         {
-            return (await new ParisOpenData().GetMovies()).Select(m => SetDistance(m, longitude, latitude)).ToList();
+            var moviesFromTheme = GetMoviesFromTheme(theme);
 
-            //return new List<MovieScene>()
-            //           {
-            //               new MovieScene()
-            //                   {
-            //                       MovieTitle = "Inception",
-            //                       Distance = 200.0,
-            //                       Street = "156 boulevard hausseman",
-            //                       ImdbUrl = "http://www.imdb.com/title/tt1985949/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p=2495768482&pf_rd_r=031VZ78GRDHCT0HKV5K7&pf_rd_s=right-4&pf_rd_t=15061&pf_rd_i=homepage&ref_=hm_otw_t0",
-            //                       Photo = "http://ia.media-imdb.com/images/M/MV5BMjMwMjgyMDk0MF5BMl5BanBnXkFtZTgwNDIxOTI4NzE@._V1_UX182_CR0,0,182,268_AL_.jpg"
-            //                   },
-            //               new MovieScene()
-            //                   {
-            //                       MovieTitle = "Midnigth in paris",
-            //                       Distance = 400.0,
-            //                       Street = "156 boulevard hausseman"
-            //                   },
-            //               new MovieScene()
-            //                   {
-            //                       MovieTitle = "My movie title",
-            //                       Distance = 1000.0,
-            //                       Street = "156 boulevard hausseman"
-            //                   }
-            //           };
+            var distanceHelper = new DistanceHelper();
+            return (await new ParisOpenData().GetMovies())
+                .Where(m=> moviesFromTheme.Any(m2=> Compare(m.MovieTitle, m2)))
+                .Select(m => distanceHelper.SetDistance(m, longitude, latitude))
+                .OrderByDescending(m => m.Distance)
+                .ToList();
         }
 
-        private MovieScene SetDistance(MovieScene movieScene, double longitude, double latitude)
+        private bool Compare(string movieTitle, string words)
         {
-            return movieScene;
+            var movieTitleLower = movieTitle.ToLower(); 
+            return  words.Split(' ').All(m => movieTitleLower.Contains(m));
+        }
+
+        private Dictionary<string, string[]> moviesFromTheme = new Dictionary<string, string[]>()
+                                                                   {
+                                                                       {
+                                                                           "comedie",
+                                                                           new[] { "" }
+                                                                       },
+                                                                       {
+                                                                           "action",
+                                                                           new[] { "" }
+                                                                       },
+                                                                       {
+                                                                           "romance",
+                                                                           new[] { "" }
+                                                                       },
+                                                                   };
+
+        private List<string> GetMoviesFromTheme(string theme)
+        {
+            return this.moviesFromTheme[theme.ToLower()].ToList();
         }
 
         // GET api/values/5

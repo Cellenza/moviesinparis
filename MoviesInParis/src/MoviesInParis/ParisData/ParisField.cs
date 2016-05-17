@@ -4,6 +4,8 @@
     {
         public double[] geo_coordinates;
 
+        public string realisateur;
+
         public string titre { get; set; }
     }
 }

@@ -6,7 +6,12 @@ angular.module('app.routes', ['app.around', 'app.tour', 'app.tourScenes'])
     // Set up the various states which the app can be in.
     // Each state's controller can be found in controllers.js
     $stateProvider
-      .state('tabsController.cameraTabDefaultPage', {
+      .state('tab', {
+        url: '/page1',
+        templateUrl: 'templates/tabsController.html',
+        abstract: true
+      })
+      .state('tab.cameraTabDefaultPage', {
         url: '/page2',
         views: {
           'tab1': {
@@ -16,7 +21,7 @@ angular.module('app.routes', ['app.around', 'app.tour', 'app.tourScenes'])
         }
       })
 
-      .state('tabsController.tourPage', {
+      .state('tab.tourPage', {
         url: '/page3',
         views: {
           'tab2': {
@@ -26,23 +31,24 @@ angular.module('app.routes', ['app.around', 'app.tour', 'app.tourScenes'])
         }
       })
 
-      .state('tourScenesPage', {
+      .state('tab.tourScenesPage', {
         url: '/tour-scenes/:theme',
-        templateUrl: 'templates/tour-scenes.html',
-        controller: 'tourScenesCtrl'
+        views: {
+          'tab2': {
+            templateUrl: 'templates/tour-scenes.html',
+            controller: 'tourScenesCtrl'
+          }
+        }
+        //  templateUrl: 'templates/tour-scenes.html'
       })
-        
+
       .state('cloudTabDefaultPage', {
         url: '/page4',
         templateUrl: 'templates/cloudTabDefaultPage.html',
         controller: 'cloudTabDefaultPageCtrl'
       })
 
-      .state('tabsController', {
-        url: '/page1',
-        templateUrl: 'templates/tabsController.html',
-        abstract: true
-      })
+
 
     $urlRouterProvider.otherwise('/page1/page2')
 

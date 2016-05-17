@@ -22,18 +22,13 @@ namespace MoviesInParis
         [HttpGet("{longitude}/{latitude}/{theme}")]
         public async Task<List<MovieScene>> Get(double longitude, double latitude, string theme)
         {
-            return (await new ParisOpenData().GetMovies()).Select(m => SetDistance(m, longitude, latitude)).ToList();
+            var distanceHelper = new DistanceHelper();
+            return (await new ParisOpenData().GetMovies())
+                .Select(m => distanceHelper.SetDistance(m, longitude, latitude))
+                .OrderByDescending(m => m.Distance)
+                .ToList();
         }
 
-        private MovieScene SetDistance(MovieScene movieScene, double longitude, double latitude)
-        {
-            var dLat = latitude - movieScene.Latitude;
-            var dLont = longitude - movieScene.Longitude;
-            var distance = Math.Sqrt(dLat * dLat + dLont * dLont);
-
-            movieScene.Distance = distance;
-
-            return movieScene;
-        }
+     
     }
 }

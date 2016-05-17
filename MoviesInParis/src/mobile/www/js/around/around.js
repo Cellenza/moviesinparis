@@ -5,7 +5,7 @@ angular.module('app.around', [])
 
       var defer = $q.defer();
 
-      $http.get('http://scenecity.azurewebsites.net/api/AroundMe/10/10/test')
+      $http.get('http://scenecity.azurewebsites.net/api/AroundMe/10/10')
         .then(function (res) {
 
           defer.resolve(res.data);
@@ -15,9 +15,18 @@ angular.module('app.around', [])
     }
 
   })
-  .controller('aroundMeCtrl', function (aroundService, $cordovaGeolocation) {
-    
-    
+  .controller('aroundMeCtrl', function ($scope, aroundService) {
+
+    $scope.load = function () {
+
+      aroundService.retrieveMovies().then(function(movies){
+
+        movies.forEach(function(m) {
+          console.log(m.MovieTitle);
+        })
+
+      });
+    }
   });
 
 

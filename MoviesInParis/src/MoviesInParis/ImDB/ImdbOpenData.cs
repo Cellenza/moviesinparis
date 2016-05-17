@@ -37,7 +37,7 @@ namespace MoviesInParis.ImdbData
         //    }
         //}
 
-        public async Task<ImdbScene> GetImdbMovie(string movieName)
+        public async Task<ImdbData> GetImdbMovie(string movieName)
         {
             using (var client = new HttpClient())
             {
@@ -69,7 +69,7 @@ namespace MoviesInParis.ImdbData
         //    }
         //}
 
-        static public async Task<ImdbScene> GetImdbMovieById(string imdbId)
+        public async Task<ImdbScene> GetImdbMovieById(string imdbId)
         {
             using (var client = new HttpClient())
             {

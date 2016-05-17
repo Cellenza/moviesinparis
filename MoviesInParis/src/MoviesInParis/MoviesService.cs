@@ -20,14 +20,19 @@ namespace MoviesInParis
                     .Select(
                         m =>
                             {
-                                var imdb = imdbOpenData.GetImdbMovie(m.MovieTitle).Result;
-                                if (imdb != null)
+                                var imdbData = imdbOpenData.GetImdbMovie(m.MovieTitle).Result;
+
+                                if (imdbData?.title_exact != null && imdbData?.title_exact.Length > 0)
                                 {
-                                    m.ImdbUrl = imdb.Poster ?? m.ImdbUrl;
-                                    m.Director = imdb.Director ?? m.Director;
-                                    m.Summary = imdb.Plot ?? m.Summary;
-                                    m.Year = imdb.Year ?? m.Year;
-                                    m.MovieTitle = imdb.Title ?? m.MovieTitle;
+                                    var imdb = imdbOpenData.GetImdbMovieById(imdbData.title_exact[0].id).Result;
+                                    if (imdb != null)
+                                    {
+                                        m.ImdbUrl = imdb.Poster ?? m.ImdbUrl;
+                                        m.Director = imdb.Director ?? m.Director;
+                                        m.Summary = imdb.Plot ?? m.Summary;
+                                        m.Year = imdb.Year ?? m.Year;
+                                        m.MovieTitle = imdb.Title ?? m.MovieTitle;
+                                    }
                                 }
 
                                 return m;

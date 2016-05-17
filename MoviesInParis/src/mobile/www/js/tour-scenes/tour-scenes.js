@@ -1,18 +1,13 @@
 angular.module('app.tourScenes', [])
-  .controller('tourScenesCtrl', function ($scope) {
-    
-    
-    $scope.themes =  ['romantique', 'action', 'comedie'];
+  .controller('tourScenesCtrl', function ($scope, tourScenesService) {
     
     $scope.loadTour = function (theme) {
-      tourService.getTour(them).then(function() {
+      tourService.getTour(theme).then(function(scenes) {
         
-        scenes.forEach(function (s) {
-          //onverra
-        })
+        scenes.scenes = scenes;
       })
     };
-
+    
   })
   .service('tourScenesService', function ($http) {
     

@@ -10,6 +10,7 @@ namespace MoviesInParis
 {
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+    using MoviesInParis.ImdbData;
     using MoviesInParis.ParisData;
 
     [Route("api/[controller]")]
@@ -20,6 +21,7 @@ namespace MoviesInParis
         public async Task<List<MovieScene>> Get(double longitude, double latitude)
         {
             var distanceHelper = new DistanceHelper();
+            var imdbOpenData = new ImdbOpenData();
             return (await new ParisOpenData().GetMovies())
                 .Select(
                     m =>
@@ -30,6 +32,20 @@ namespace MoviesInParis
                                 "http://ia.media-imdb.com/images/M/MV5BMjMwMjgyMDk0MF5BMl5BanBnXkFtZTgwNDIxOTI4NzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
                             return m;
                         })
+                  .Select(
+                      async m =>
+                          {
+                              var imdb = await imdbOpenData.GetImdbMovie(m.MovieTitle);
+                              if (imdb != null)
+                              {
+                                  m.ImdbUrl = imdb.Poster;
+                                  m.Director = imdb.Director;
+                                  m.Summary = imdb.Plot;
+                                  m.Year = imdb.Year;
+                              }
+
+                              return m;
+                          })
                 .Select(m => distanceHelper.SetDistance(m, longitude, latitude))
                 .OrderBy(m => m.Distance)
                 .ToList();

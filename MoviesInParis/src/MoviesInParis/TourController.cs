@@ -18,11 +18,6 @@ namespace MoviesInParis
     [Route("api/[controller]")]
     public class TourController : Controller
     {
-        
-        const string ImdbUri =
-            "http://opendata.paris.fr/api/records/1.0/search/?dataset=tournagesdefilmsparis2011&facet=realisateur&facet=date_debut_evenement&facet=date_fin_evenement&facet=cadre&facet=lieu&facet=arrondissement";
-
-
         // GET api/values/5
         [HttpGet("{longitude}/{latitude}/{theme}")]
         public async Task<List<MovieScene>> Get(double longitude, double latitude, string theme)
@@ -68,7 +63,7 @@ namespace MoviesInParis
         [HttpGet("imdb/{movieName}")]
         public async Task<ImdbScene> GetImdbMovie(string movieName)
         {
-            return (await ImdbOpenData.GetImdbMovie(movieName));
+            return (await new ImdbOpenData().GetImdbMovie(movieName));
         }
     }
 }

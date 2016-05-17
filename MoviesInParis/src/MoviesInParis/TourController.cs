@@ -11,13 +11,6 @@ namespace MoviesInParis
     [Route("api/[controller]")]
     public class TourController : Controller
     {
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET api/values/5
         [HttpGet("{longitude}/{latitude}")]
         public List<MovieScene> Get(double longitude, double latitude)

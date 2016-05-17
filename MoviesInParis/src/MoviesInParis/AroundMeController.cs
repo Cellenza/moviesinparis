@@ -19,10 +19,30 @@ namespace MoviesInParis
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{longitude}/{latitude}")]
+        public List<MovieScene> Get(double longitude, double latitude)
         {
-            return "value";
+            return new List<MovieScene>()
+                       {
+                           new MovieScene()
+                               {
+                                   MovieTitle = "Inception",
+                                   Distance = 200.0,
+                                   Street = "156 boulevard hausseman"
+                               },
+                           new MovieScene()
+                               {
+                                   MovieTitle = "Midnigth in paris",
+                                   Distance = 400.0,
+                                   Street = "156 boulevard hausseman"
+                               },
+                           new MovieScene()
+                               {
+                                   MovieTitle = "My movie title",
+                                   Distance = 1000.0,
+                                   Street = "156 boulevard hausseman"
+                               }
+                       };
         }
 
         // POST api/values

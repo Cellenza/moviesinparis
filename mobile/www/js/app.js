@@ -10,7 +10,6 @@ angular.module('app', ['ionic',
   'app.around',
   'app.tour',
   'app.routes',
-  'app.services',
   'app.directives'])
 
   .run(function ($ionicPlatform) {

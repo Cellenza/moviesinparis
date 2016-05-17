@@ -1,6 +1,9 @@
 angular.module('app.tour', [])
   .controller('tourCtrl', function ($scope, tourService) {
     
+    
+    $scope.themes =  ['romantique', 'action', 'comedie'];
+    
     $scope.loadTour = function (theme) {
       tourService.getTour(them).then(function() {
         
@@ -8,7 +11,7 @@ angular.module('app.tour', [])
           //onverra
         })
       })
-    }
+    };
 
   })
   .service('tourService', function ($http) {

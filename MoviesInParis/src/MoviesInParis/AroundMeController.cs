@@ -23,7 +23,7 @@ namespace MoviesInParis
         public async Task<List<MovieScene>> Get(double longitude, double latitude)
         {
             var moviesService = new MoviesService();
-            return await moviesService.GetMovies(longitude, latitude, 100);
+            return await moviesService.GetMovies(longitude, latitude, 100); 
         }
     }
 }

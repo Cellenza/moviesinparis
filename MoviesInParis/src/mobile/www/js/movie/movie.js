@@ -4,6 +4,14 @@ angular.module('app.tour', [])
     
     $scope.themes =  ['romantique', 'action', 'comedie'];
     
+    $scope.loadTour = function (theme) {
+      tourService.getTour(them).then(function() {
+        
+        scenes.forEach(function (s) {
+          //onverra
+        })
+      })
+    };
 
   })
   .service('tourService', function ($http) {

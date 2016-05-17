@@ -20,6 +20,12 @@
         [JsonProperty("photo")]
         public string Photo { get; set; }
 
+        [JsonProperty("summary")]
+        public string Summary { get; set; }
+
+        [JsonProperty("director")]
+        public string Director { get; set; }
+
         [JsonProperty("latitude")]
         public double Latitude { get; set; }
 

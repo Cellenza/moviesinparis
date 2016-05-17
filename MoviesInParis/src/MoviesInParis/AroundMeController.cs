@@ -8,34 +8,31 @@ using Microsoft.AspNet.Mvc;
 
 namespace MoviesInParis
 {
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+    using MoviesInParis.ParisData;
+
     [Route("api/[controller]")]
     public class AroundMeController : Controller
     {
         // GET api/values/5
         [HttpGet("{longitude}/{latitude}")]
-        public List<MovieScene> Get(double longitude, double latitude)
+        public async Task<List<MovieScene>> Get(double longitude, double latitude)
         {
-            return new List<MovieScene>()
-                       {
-                           new MovieScene()
-                               {
-                                   MovieTitle = "Inception",
-                                   Distance = 200.0,
-                                   Street = "156 boulevard hausseman"
-                               },
-                           new MovieScene()
-                               {
-                                   MovieTitle = "Midnigth in paris",
-                                   Distance = 400.0,
-                                   Street = "156 boulevard hausseman"
-                               },
-                           new MovieScene()
-                               {
-                                   MovieTitle = "My movie title",
-                                   Distance = 1000.0,
-                                   Street = "156 boulevard hausseman"
-                               }
-                       };
+            var distanceHelper = new DistanceHelper();
+            return (await new ParisOpenData().GetMovies())
+                .Select(
+                    m =>
+                        {
+                            m.ImdbUrl =
+                                "http://www.imdb.com/title/tt1985949/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p=2495768482&pf_rd_r=19Z6EK3TTTY0HMFCARH3&pf_rd_s=right-4&pf_rd_t=15061&pf_rd_i=homepage&ref_=hm_otw_t0";
+                            m.Photo =
+                                "http://ia.media-imdb.com/images/M/MV5BMjMwMjgyMDk0MF5BMl5BanBnXkFtZTgwNDIxOTI4NzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
+                            return m;
+                        })
+                .Select(m => distanceHelper.SetDistance(m, longitude, latitude))
+                .OrderBy(m => m.Distance)
+                .ToList();
         }
     }
 }

@@ -22,18 +22,41 @@ namespace MoviesInParis
         [HttpGet("{longitude}/{latitude}/{theme}")]
         public async Task<List<MovieScene>> Get(double longitude, double latitude, string theme)
         {
-            return (await new ParisOpenData().GetMovies()).Select(m => SetDistance(m, longitude, latitude)).ToList();
+            var moviesFromTheme = GetMoviesFromTheme(theme);
+
+            var distanceHelper = new DistanceHelper();
+            return (await new ParisOpenData().GetMovies())
+                .Where(m=> moviesFromTheme.Any(m2=> Compare(m.MovieTitle, m2)))
+                .Select(m => distanceHelper.SetDistance(m, longitude, latitude))
+                .OrderByDescending(m => m.Distance)
+                .ToList();
         }
 
-        private MovieScene SetDistance(MovieScene movieScene, double longitude, double latitude)
+        private bool Compare(string movieTitle, string words)
         {
-            var dLat = latitude - movieScene.Latitude;
-            var dLont = longitude - movieScene.Longitude;
-            var distance = Math.Sqrt(dLat * dLat + dLont * dLont);
+            var movieTitleLower = movieTitle.ToLower(); 
+            return  words.Split(' ').All(m => movieTitleLower.Contains(m));
+        }
 
-            movieScene.Distance = distance;
+        private Dictionary<string, string[]> moviesFromTheme = new Dictionary<string, string[]>()
+                                                                   {
+                                                                       {
+                                                                           "comedie",
+                                                                           new[] { "" }
+                                                                       },
+                                                                       {
+                                                                           "action",
+                                                                           new[] { "" }
+                                                                       },
+                                                                       {
+                                                                           "romance",
+                                                                           new[] { "" }
+                                                                       },
+                                                                   };
 
-            return movieScene;
+        private List<string> GetMoviesFromTheme(string theme)
+        {
+            return this.moviesFromTheme[theme.ToLower()].ToList();
         }
     }
 }

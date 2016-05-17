@@ -1,4 +1,4 @@
-angular.module('app.routes', ['app.around', 'app.tour'])
+angular.module('app.routes', ['app.around', 'app.tour', 'app.tourScenes'])
 
   .config(function ($stateProvider, $urlRouterProvider) {
     // Ionic uses AngularUI Router which uses the concept of states
@@ -26,6 +26,12 @@ angular.module('app.routes', ['app.around', 'app.tour'])
         }
       })
 
+      .state('tourScenesPage', {
+        url: '/tour-scenes/:theme',
+        templateUrl: 'templates/tour-scenes.html',
+        controller: 'tourScenesCtrl'
+      })
+        
       .state('cloudTabDefaultPage', {
         url: '/page4',
         templateUrl: 'templates/cloudTabDefaultPage.html',

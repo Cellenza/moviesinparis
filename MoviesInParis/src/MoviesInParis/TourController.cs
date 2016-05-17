@@ -18,6 +18,24 @@ namespace MoviesInParis
     [Route("api/[controller]")]
     public class TourController : Controller
     {
+        static TourController()
+        {
+            var movies = new Dictionary<string, string>()
+                             {
+                                 { "L'AMOUR C'EST MIEUX A DEUX", "comedie" }, { "TOUT CE QUI BRILLE", "comedie" },
+                                 { "L'ARNACOEUR / HEARTBREAKER", "comedie" },
+                                 { "LES AVENTURES EXTRAORDINAIRES D'ADELE BLANC SEC", "action" },
+                                 { "LES PETITS MOUCHOIRS", "romance" }, { "CAMPING 2", "comedie" },
+                                 { "INCEPTION / OLIVER'S ARROW", "action" }, { "TAKEN", "action" },
+                                 { "FAUBOURG 36", "action" },
+                             };
+
+            moviesFromTheme = (from m in movies group m by m.Value into m2 select m2).ToDictionary(
+                m => m.Key,
+                m => m.Select(m2 => m2.Key).ToArray());
+        }
+
+
         // GET api/values/5
         [HttpGet("{longitude}/{latitude}/{theme}")]
         public async Task<List<MovieScene>> Get(double longitude, double latitude, string theme)
@@ -26,7 +44,7 @@ namespace MoviesInParis
 
             var distanceHelper = new DistanceHelper();
             return (await new ParisOpenData().GetMovies())
-                .Where(m=> moviesFromTheme.Any(m2=> Compare(m.MovieTitle, m2)))
+                .Where(m => moviesFromTheme.Any(m2 => Compare(m.MovieTitle, m2)))
                 .Select(m => distanceHelper.SetDistance(m, longitude, latitude))
                 .OrderByDescending(m => m.Distance)
                 .ToList();
@@ -34,29 +52,15 @@ namespace MoviesInParis
 
         private bool Compare(string movieTitle, string words)
         {
-            var movieTitleLower = movieTitle.ToLower(); 
-            return  words.Split(' ').All(m => movieTitleLower.Contains(m));
+            var movieTitleLower = movieTitle.ToLower();
+            return words.Split(' ').All(m => movieTitleLower.Contains(m));
         }
 
-        private Dictionary<string, string[]> moviesFromTheme = new Dictionary<string, string[]>()
-                                                                   {
-                                                                       {
-                                                                           "comedie",
-                                                                           new[] { "" }
-                                                                       },
-                                                                       {
-                                                                           "action",
-                                                                           new[] { "" }
-                                                                       },
-                                                                       {
-                                                                           "romance",
-                                                                           new[] { "" }
-                                                                       },
-                                                                   };
+        private static readonly Dictionary<string, string[]> moviesFromTheme = null;
 
         private List<string> GetMoviesFromTheme(string theme)
         {
-            return this.moviesFromTheme[theme.ToLower()].ToList();
+            return moviesFromTheme[theme.ToLower()].ToList();
         }
 
         //GET api/values/5

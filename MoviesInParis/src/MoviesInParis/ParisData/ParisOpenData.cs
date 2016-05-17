@@ -23,13 +23,24 @@ namespace MoviesInParis.ParisData
                                   select
                                       new MovieScene()
                                           {
-                                              MovieTitle = r.fields.titre,
+                                              MovieTitle = GetTitle(r),
+                                              Director = r.fields.realisateur,
                                               Longitude = GetLongitude(r),
                                               Latitude = GetLatitude(r),
                                           };
 
-                return Enumerable.ToList<MovieScene>(movieScenes);
+                return movieScenes.ToList();
             }
+        }
+
+        private static string GetTitle(ParisRecord r)
+        {
+            if (r.fields.titre.Contains("/"))
+            {
+                return r.fields.titre.Split('/')[0].Trim();
+            }
+
+            return r.fields.titre.Trim();
         }
 
         private static double GetLatitude(ParisRecord r)

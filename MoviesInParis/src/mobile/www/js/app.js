@@ -9,6 +9,7 @@ angular.module('app', ['ionic',
   'app.controllers',
   'app.around',
   'app.tour',
+  'app.tourScenes',
   'app.routes',
   'app.directives'])
 

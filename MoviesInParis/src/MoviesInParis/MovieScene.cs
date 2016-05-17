@@ -31,5 +31,8 @@
 
         [JsonProperty("longitude")]
         public double Longitude { get; set; }
+
+        [JsonProperty("year")]
+        public string Year { get; set; }
     }
 }

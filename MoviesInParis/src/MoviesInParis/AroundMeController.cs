@@ -10,6 +10,7 @@ namespace MoviesInParis
 {
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+    using MoviesInParis.ImdbData;
     using MoviesInParis.ParisData;
 
     [Route("api/[controller]")]
@@ -20,16 +21,23 @@ namespace MoviesInParis
         public async Task<List<MovieScene>> Get(double longitude, double latitude)
         {
             var distanceHelper = new DistanceHelper();
+            var imdbOpenData = new ImdbOpenData();
             return (await new ParisOpenData().GetMovies())
-                .Select(
-                    m =>
-                        {
-                            m.ImdbUrl =
-                                "http://www.imdb.com/title/tt1985949/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p=2495768482&pf_rd_r=19Z6EK3TTTY0HMFCARH3&pf_rd_s=right-4&pf_rd_t=15061&pf_rd_i=homepage&ref_=hm_otw_t0";
-                            m.Photo =
-                                "http://ia.media-imdb.com/images/M/MV5BMjMwMjgyMDk0MF5BMl5BanBnXkFtZTgwNDIxOTI4NzE@._V1_UX182_CR0,0,182,268_AL_.jpg";
-                            return m;
-                        })
+                  .Select(
+                       m =>
+                          {
+                              var imdb = imdbOpenData.GetImdbMovie(m.MovieTitle).Result;
+                              if (imdb != null)
+                              {
+                                  m.ImdbUrl = imdb.Poster ?? m.ImdbUrl;
+                                  m.Director = imdb.Director ?? m.Director;
+                                  m.Summary = imdb.Plot ?? m.Summary;
+                                  m.Year = imdb.Year ?? m.Year;
+                                  m.MovieTitle = imdb.Title ?? m.MovieTitle;
+                              }
+
+                              return m;
+                          })
                 .Select(m => distanceHelper.SetDistance(m, longitude, latitude))
                 .OrderBy(m => m.Distance)
                 .ToList();

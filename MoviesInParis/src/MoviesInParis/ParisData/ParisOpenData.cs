@@ -24,12 +24,32 @@ namespace MoviesInParis.ParisData
                                       new MovieScene()
                                           {
                                               MovieTitle = r.fields.titre,
-                                              Longitude = (double)r.fields?.geo_coordinates[0],
-                                              Latitude = (double)r.fields?.geo_coordinates[1],
+                                              Longitude = GetLongitude(r),
+                                              Latitude = GetLatitude(r),
                                           };
 
                 return Enumerable.ToList<MovieScene>(movieScenes);
             }
+        }
+
+        private static double GetLatitude(ParisRecord r)
+        {
+            if (r.fields.geo_coordinates != null)
+            {
+                return r.fields.geo_coordinates[1];
+            }
+
+            return 0;
+        }
+
+        private static double GetLongitude(ParisRecord r)
+        {
+            if (r.fields.geo_coordinates != null)
+            {
+                return r.fields.geo_coordinates[0];
+            }
+
+            return 0;
         }
     }
 }

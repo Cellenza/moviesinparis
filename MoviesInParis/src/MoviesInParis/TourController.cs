@@ -22,6 +22,8 @@ namespace MoviesInParis
         [HttpGet("{longitude}/{latitude}/{theme}")]
         public async Task<List<MovieScene>> Get(double longitude, double latitude, string theme)
         {
+            var moviesFromTheme = GetMoviesFromTheme(theme);
+
             var distanceHelper = new DistanceHelper();
             return (await new ParisOpenData().GetMovies())
                 .Select(m => distanceHelper.SetDistance(m, longitude, latitude))
@@ -29,6 +31,25 @@ namespace MoviesInParis
                 .ToList();
         }
 
-     
+        private Dictionary<string, string[]> moviesFromTheme = new Dictionary<string, string[]>()
+                                                                   {
+                                                                       {
+                                                                           "comedie",
+                                                                           new[] { "" }
+                                                                       },
+                                                                       {
+                                                                           "action",
+                                                                           new[] { "" }
+                                                                       },
+                                                                       {
+                                                                           "romance",
+                                                                           new[] { "" }
+                                                                       },
+                                                                   };
+
+        private List<string> GetMoviesFromTheme(string theme)
+        {
+            return this.moviesFromTheme[theme.ToLower()].ToList();
+        }
     }
 }

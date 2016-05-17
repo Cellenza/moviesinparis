@@ -17,14 +17,12 @@ angular.module('app.around', [])
   })
   .controller('aroundMeCtrl', function ($scope, aroundService) {
 
+    $scope.movies = [];
     $scope.load = function () {
 
       aroundService.retrieveMovies().then(function(movies){
 
-        movies.forEach(function(m) {
-          console.log(m.MovieTitle);
-        })
-
+        $scope.movies = movies
       });
     }
   });

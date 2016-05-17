@@ -28,7 +28,9 @@ namespace MoviesInParis
                                {
                                    MovieTitle = "Inception",
                                    Distance = 200.0,
-                                   Street = "156 boulevard hausseman"
+                                   Street = "156 boulevard hausseman",
+                                   ImdbUrl = "http://www.imdb.com/title/tt1985949/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p=2495768482&pf_rd_r=031VZ78GRDHCT0HKV5K7&pf_rd_s=right-4&pf_rd_t=15061&pf_rd_i=homepage&ref_=hm_otw_t0",
+                                   Photo = "http://ia.media-imdb.com/images/M/MV5BMjMwMjgyMDk0MF5BMl5BanBnXkFtZTgwNDIxOTI4NzE@._V1_UX182_CR0,0,182,268_AL_.jpg"
                                },
                            new MovieScene()
                                {
@@ -71,5 +73,9 @@ namespace MoviesInParis
         public double Distance { get; set; }
 
         public string Street { get; set; }
+
+        public string ImdbUrl { get; set; }
+
+        public string Photo { get; set; }
     }
 }

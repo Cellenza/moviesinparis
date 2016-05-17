@@ -19,8 +19,8 @@ namespace MoviesInParis
         }
 
         // GET api/values/5
-        [HttpGet("{longitude}/{latitude}")]
-        public List<MovieScene> Get(double longitude, double latitude)
+        [HttpGet("{longitude}/{latitude}/{theme}")]
+        public List<MovieScene> Get(double longitude, double latitude, string theme)
         {
             return new List<MovieScene>()
                        {

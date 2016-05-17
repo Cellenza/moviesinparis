@@ -19,6 +19,10 @@ namespace MoviesInParis
         const string Uri =
             "http://opendata.paris.fr/api/records/1.0/search/?dataset=tournagesdefilmsparis2011&facet=realisateur&facet=date_debut_evenement&facet=date_fin_evenement&facet=cadre&facet=lieu&facet=arrondissement";
 
+        const string ImdbUri =
+            "http://opendata.paris.fr/api/records/1.0/search/?dataset=tournagesdefilmsparis2011&facet=realisateur&facet=date_debut_evenement&facet=date_fin_evenement&facet=cadre&facet=lieu&facet=arrondissement";
+
+
         // GET api/values/5
         [HttpGet("{longitude}/{latitude}/{theme}")]
         public async Task<List<MovieScene>> Get(double longitude, double latitude, string theme)
@@ -70,6 +74,26 @@ namespace MoviesInParis
                                               //Longitude = r.fields.Longitude,
                                               //Latitude = r.fields.Latitude,
                                           };
+
+                return movieScenes.ToList();
+            }
+        }
+
+        private static async Task<ImDBScene> GetImdbMovie(string movieName)
+        {
+            using (var client = new HttpClient())
+            {
+                var parisDataString = await client.GetStringAsync(Uri);
+                var record = JsonConvert.DeserializeObject<ParisData>(parisDataString);
+
+                var movieScenes = from r in record.Records
+                                  select
+                                      new MovieScene()
+                                      {
+                                          MovieTitle = r.fields.titre,
+                                          //Longitude = r.fields.Longitude,
+                                          //Latitude = r.fields.Latitude,
+                                      };
 
                 return movieScenes.ToList();
             }

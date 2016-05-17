@@ -23,34 +23,16 @@ namespace MoviesInParis
         public async Task<List<MovieScene>> Get(double longitude, double latitude, string theme)
         {
             return (await new ParisOpenData().GetMovies()).Select(m => SetDistance(m, longitude, latitude)).ToList();
-
-            //return new List<MovieScene>()
-            //           {
-            //               new MovieScene()
-            //                   {
-            //                       MovieTitle = "Inception",
-            //                       Distance = 200.0,
-            //                       Street = "156 boulevard hausseman",
-            //                       ImdbUrl = "http://www.imdb.com/title/tt1985949/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p=2495768482&pf_rd_r=031VZ78GRDHCT0HKV5K7&pf_rd_s=right-4&pf_rd_t=15061&pf_rd_i=homepage&ref_=hm_otw_t0",
-            //                       Photo = "http://ia.media-imdb.com/images/M/MV5BMjMwMjgyMDk0MF5BMl5BanBnXkFtZTgwNDIxOTI4NzE@._V1_UX182_CR0,0,182,268_AL_.jpg"
-            //                   },
-            //               new MovieScene()
-            //                   {
-            //                       MovieTitle = "Midnigth in paris",
-            //                       Distance = 400.0,
-            //                       Street = "156 boulevard hausseman"
-            //                   },
-            //               new MovieScene()
-            //                   {
-            //                       MovieTitle = "My movie title",
-            //                       Distance = 1000.0,
-            //                       Street = "156 boulevard hausseman"
-            //                   }
-            //           };
         }
 
         private MovieScene SetDistance(MovieScene movieScene, double longitude, double latitude)
         {
+            var dLat = latitude - movieScene.Latitude;
+            var dLont = longitude - movieScene.Longitude;
+            var distance = Math.Sqrt(dLat * dLat + dLont * dLont);
+
+            movieScene.Distance = distance;
+
             return movieScene;
         }
     }

@@ -11,14 +11,14 @@ namespace MoviesInParis
 {
     using System.Net.Http;
 
-    using Newtonsoft.Json;
+    using MoviesInParis.ParisData;
 
+    using Newtonsoft.Json;
+    using ImdbData;
     [Route("api/[controller]")]
     public class TourController : Controller
     {
-        const string Uri =
-            "http://opendata.paris.fr/api/records/1.0/search/?dataset=tournagesdefilmsparis2011&facet=realisateur&facet=date_debut_evenement&facet=date_fin_evenement&facet=cadre&facet=lieu&facet=arrondissement";
-
+        
         const string ImdbUri =
             "http://opendata.paris.fr/api/records/1.0/search/?dataset=tournagesdefilmsparis2011&facet=realisateur&facet=date_debut_evenement&facet=date_fin_evenement&facet=cadre&facet=lieu&facet=arrondissement";
 
@@ -27,7 +27,7 @@ namespace MoviesInParis
         [HttpGet("{longitude}/{latitude}/{theme}")]
         public async Task<List<MovieScene>> Get(double longitude, double latitude, string theme)
         {
-            return (await GetMovies()).Select(m => SetDistance(m, longitude, latitude)).ToList();
+            return (await new ParisOpenData().GetMovies()).Select(m => SetDistance(m, longitude, latitude)).ToList();
 
             //return new List<MovieScene>()
             //           {
@@ -59,59 +59,11 @@ namespace MoviesInParis
             return movieScene;
         }
 
-        private static async Task<List<MovieScene>> GetMovies()
+        // GET api/values/5
+        [HttpGet("imdb/{movieName}")]
+        public async Task<ImdbScene> GetImdbMovie(string movieName)
         {
-            using (var client = new HttpClient())
-            {
-                var parisDataString = await client.GetStringAsync(Uri);
-                var record = JsonConvert.DeserializeObject<ParisData>(parisDataString);
-
-                var movieScenes = from r in record.Records
-                                  select
-                                      new MovieScene()
-                                          {
-                                              MovieTitle = r.fields.titre,
-                                              //Longitude = r.fields.Longitude,
-                                              //Latitude = r.fields.Latitude,
-                                          };
-
-                return movieScenes.ToList();
-            }
+            return (await ImdbOpenData.GetImdbMovie(movieName));
         }
-
-        private static async Task<ImDBScene> GetImdbMovie(string movieName)
-        {
-            using (var client = new HttpClient())
-            {
-                var parisDataString = await client.GetStringAsync(Uri);
-                var record = JsonConvert.DeserializeObject<ParisData>(parisDataString);
-
-                var movieScenes = from r in record.Records
-                                  select
-                                      new MovieScene()
-                                      {
-                                          MovieTitle = r.fields.titre,
-                                          //Longitude = r.fields.Longitude,
-                                          //Latitude = r.fields.Latitude,
-                                      };
-
-                return movieScenes.ToList();
-            }
-        }
-    }
-
-    public class ParisData
-    {
-        public IList<ParisRecord> Records { get; set; }
-    }
-
-    public class ParisRecord
-    {
-        public ParisField fields { get; set; }
-    }
-
-    public class ParisField
-    {
-        public string titre { get; set; }
     }
 }

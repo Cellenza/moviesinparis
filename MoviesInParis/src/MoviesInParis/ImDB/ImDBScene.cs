@@ -1,19 +1,17 @@
-﻿namespace MoviesInParis
+﻿namespace MoviesInParis.ImdbData
 {
-    public class ImDBScene
+    public class ImdbScene
     {
-        public string MovieTitle { get; set; }
+        public string Title { get; set; }
 
-        public double Distance { get; set; }
+        public string Year { get; set; }
 
-        public string Street { get; set; }
+        public string Genre { get; set; }
 
-        public string ImdbUrl { get; set; }
+        public string Plot { get; set; }
 
-        public string Photo { get; set; }
+        public string Director { get; set; }
 
-        public double Latitude { get; set; }
-
-        public double Longitude { get; set; }
+        public string Poster { get; set; }
     }
 }

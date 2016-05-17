@@ -14,7 +14,7 @@ namespace MoviesInParis
     using MoviesInParis.ParisData;
 
     using Newtonsoft.Json;
-    using ImdbData;
+    using MoviesInParis.ImdbData;
     [Route("api/[controller]")]
     public class TourController : Controller
     {
@@ -64,11 +64,11 @@ namespace MoviesInParis
             return this.moviesFromTheme[theme.ToLower()].ToList();
         }
 
-        // GET api/values/5
-        [HttpGet("imdb/{movieName}")]
-        public async Task<ImdbScene> GetImdbMovie(string movieName)
-        {
-            return (await ImdbOpenData.GetImdbMovie(movieName));
-        }
+        //GET api/values/5
+        //[HttpGet("imdb/{movieName}")]
+        //public async Task<MoviesInParis.> GetImdbMovie(string movieName)
+        //{
+        //    return (await ImdbOpenData.GetImdbMovie(movieName));
+        //}
     }
 }

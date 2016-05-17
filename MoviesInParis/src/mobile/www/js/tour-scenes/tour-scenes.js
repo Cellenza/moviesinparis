@@ -1,8 +1,8 @@
 angular.module('app.tourScenes', [])
-  .controller('tourScenesCtrl', function ($scope, tourScenesService) {
+  .controller('tourScenesCtrl', function ($scope, $stateParams, tourScenesService) {
     
-    $scope.load = function (theme) {
-      tourService.getTour(theme).then(function(scenes) {
+    $scope.load = function () {
+      tourScenesService.getTour($stateParams.theme).then(function(scenes) {
         
         scenes.scenes = scenes;
       })
@@ -10,13 +10,13 @@ angular.module('app.tourScenes', [])
    
     
   })
-  .service('tourScenesService', function ($http) {
+  .service('tourScenesService', function ($http, $q) {
     
     this.getTour = function (theme) {
 
       var defer = $q.defer();
 
-      $http.get('http://scenecity.azurewebsites.net/api/Tour/10/10/' + theme)
+      $http.get('http://scenecity.azurewebsites.net/api/Tour/1/1/' + theme)
         .then(function (res) {
 
           defer.resolve(res.data);

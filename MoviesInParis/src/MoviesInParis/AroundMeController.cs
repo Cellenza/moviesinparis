@@ -31,7 +31,7 @@ namespace MoviesInParis
                             return m;
                         })
                 .Select(m => distanceHelper.SetDistance(m, longitude, latitude))
-                .OrderByDescending(m => m.Distance)
+                .OrderBy(m => m.Distance)
                 .ToList();
         }
     }

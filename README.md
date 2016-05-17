@@ -3,8 +3,8 @@
 **Description de l'idée**
 
 * Paris – Cinéma – Tourisme 
-* Donne infos sites touristiques les Lieux tournage  
-* Offre des parcours de touriste  
+* Donne infos des sites touristiques les lieux tournage  
+* Offre des parcours touristiques pour les lieux de tournage  
 
 **Fonctionnalités**  
 * Montrer lieux de tournage autour de l’utilisateur  

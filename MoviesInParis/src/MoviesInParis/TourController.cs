@@ -42,18 +42,19 @@ namespace MoviesInParis
         {
             var moviesFromTheme = GetMoviesFromTheme(theme);
 
-            var distanceHelper = new DistanceHelper();
-            return (await new ParisOpenData().GetMovies())
+            var movies = (await new ParisOpenData().GetMovies())
                 .Where(m => moviesFromTheme.Any(m2 => Compare(m.MovieTitle, m2)))
-                .Select(m => distanceHelper.SetDistance(m, longitude, latitude))
-                .OrderByDescending(m => m.Distance)
                 .ToList();
+
+            var moviesService = new MoviesService();
+            return moviesService.GetMovies(longitude, latitude, 20, movies);
+
         }
 
         private bool Compare(string movieTitle, string words)
         {
             var movieTitleLower = movieTitle.ToLower();
-            return words.Split(' ').All(m => movieTitleLower.Contains(m));
+            return words.ToLower() == movieTitleLower;
         }
 
         private static readonly Dictionary<string, string[]> moviesFromTheme = null;

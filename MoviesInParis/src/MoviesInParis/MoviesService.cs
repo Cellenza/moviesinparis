@@ -9,12 +9,12 @@ namespace MoviesInParis
 
     public class MoviesService
     {
-        public async Task<List<MovieScene>> GetMovies(double longitude, double latitude, int take)
+        public List<MovieScene> GetMovies(double longitude, double latitude, int take, List<MovieScene> movieScenes)
         {
             var distanceHelper = new DistanceHelper();
             var imdbOpenData = new ImdbOpenData();
             return
-                (await new ParisOpenData().GetMovies()).Select(m => distanceHelper.SetDistance(m, longitude, latitude))
+                movieScenes.Select(m => distanceHelper.SetDistance(m, longitude, latitude))
                     .OrderBy(m => m.Distance)
                     .Take(take)
                     .Select(
@@ -24,10 +24,12 @@ namespace MoviesInParis
 
                                 if (imdbData?.title_exact != null && imdbData?.title_exact.Length > 0)
                                 {
+                                    m.ImdbUrl = $"http://www.imdb.com/title/{imdbData?.title_exact[0].id}/";
+
                                     var imdb = imdbOpenData.GetImdbMovieById(imdbData.title_exact[0].id).Result;
                                     if (imdb != null)
                                     {
-                                        m.ImdbUrl = imdb.Poster ?? m.ImdbUrl;
+                                        m.Photo = imdb.Poster ?? m.Photo;
                                         m.Director = imdb.Director ?? m.Director;
                                         m.Summary = imdb.Plot ?? m.Summary;
                                         m.Year = imdb.Year ?? m.Year;

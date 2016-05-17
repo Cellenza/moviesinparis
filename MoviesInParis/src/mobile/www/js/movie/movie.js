@@ -1,22 +1,16 @@
-angular.module('app.tour', [])
-  .controller('tourCtrl', function ($scope, tourService) {
+angular.module('app.movie', [])
+  .controller('tourCtrl', function ($scope, movieService) {
     
-    
-    $scope.themes =  ['romantique', 'action', 'comedie'];
-    
-    $scope.loadTour = function (theme) {
-      tourService.getTour(them).then(function() {
-        
-        scenes.forEach(function (s) {
-          //onverra
-        })
+    $scope.load = function () {
+      tourService.getMovieDetails(title).then(function(movie) {
+        scope.movie = movie
       })
     };
 
   })
-  .service('tourService', function ($http) {
+  .service('movieService', function ($http) {
     
-    this.getTour = function (theme) {
+    this.getMovieDetails = function (title) {
 
       var defer = $q.defer();
 

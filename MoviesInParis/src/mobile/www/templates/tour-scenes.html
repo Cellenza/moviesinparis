@@ -1,7 +1,14 @@
-<ion-view title="Parcours" id="page5" class=" ">
-    <ion-content padding="true" class="has-header"></ion-content>
+<ion-view title="Around me" id="page2" class=" " ng-init="load()">
+  <ion-content padding="true" class="has-header">
+    <div class="list">
 
-    <ion-list >
-        <ion-item ng-repeat="theme in themes" ng-href="#/tour-scenes/{{theme}}" >{{ theme }}</ion-item>
-    </ion-list>
+      <a class="item item-thumbnail-left" ng-repeat="movie in movies">
+        <img  src="{{ movie.photo}}" />
+        <h1>{{ movie.movieTitle }}</h1>
+        <p>à 100m</p>
+        <p> {{movie.address}} </p>
+      </a>
+
+    </div>
+  </ion-content>
 </ion-view>

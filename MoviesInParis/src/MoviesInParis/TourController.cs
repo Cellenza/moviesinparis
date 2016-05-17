@@ -26,9 +26,16 @@ namespace MoviesInParis
 
             var distanceHelper = new DistanceHelper();
             return (await new ParisOpenData().GetMovies())
+                .Where(m=> moviesFromTheme.Any(m2=> Compare(m.MovieTitle, m2)))
                 .Select(m => distanceHelper.SetDistance(m, longitude, latitude))
                 .OrderByDescending(m => m.Distance)
                 .ToList();
+        }
+
+        private bool Compare(string movieTitle, string words)
+        {
+            var movieTitleLower = movieTitle.ToLower(); 
+            return  words.Split(' ').All(m => movieTitleLower.Contains(m));
         }
 
         private Dictionary<string, string[]> moviesFromTheme = new Dictionary<string, string[]>()

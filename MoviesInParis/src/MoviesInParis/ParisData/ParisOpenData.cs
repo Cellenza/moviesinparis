@@ -10,27 +10,34 @@ namespace MoviesInParis.ParisData
     public class ParisOpenData
     {
         private const string Uri =
-            "http://opendata.paris.fr/api/records/1.0/search/?dataset=tournagesdefilmsparis2011&facet=realisateur&facet=date_debut_evenement&facet=date_fin_evenement&facet=cadre&facet=lieu&facet=arrondissement";
+            "http://opendata.paris.fr/api/records/1.0/search/?dataset=tournagesdefilmsparis2011&rows=9999&facet=realisateur&facet=date_debut_evenement&facet=date_fin_evenement&facet=cadre&facet=lieu&facet=arrondissement";
+
+        private static List<MovieScene> movies = null;
 
         public async Task<List<MovieScene>> GetMovies()
         {
-            using (var client = new HttpClient())
+            if (movies == null)
             {
-                var parisDataString = await client.GetStringAsync(Uri);
-                var record = JsonConvert.DeserializeObject<ParisData>(parisDataString);
 
-                var movieScenes = from r in record.Records
-                                  select
-                                      new MovieScene()
+                using (var client = new HttpClient())
+                {
+                    var parisDataString = await client.GetStringAsync(Uri);
+                    var record = JsonConvert.DeserializeObject<ParisData>(parisDataString);
+
+                    var movieScenes = from r in record.Records
+                                      select
+                                          new MovieScene()
                                           {
                                               MovieTitle = GetTitle(r),
                                               Director = r.fields.realisateur,
                                               Longitude = GetLongitude(r),
                                               Latitude = GetLatitude(r),
                                           };
-
-                return movieScenes.ToList();
+                    movies = movieScenes.ToList();
+                }
             }
+
+            return movies;
         }
 
         private static string GetTitle(ParisRecord r)

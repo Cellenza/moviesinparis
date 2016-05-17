@@ -32,6 +32,7 @@ namespace MoviesInParis.ParisData
                                               Director = r.fields.realisateur,
                                               Longitude = GetLongitude(r),
                                               Latitude = GetLatitude(r),
+                                              Street = r.fields.adresse_complete,
                                           };
                     movies = movieScenes.ToList();
                 }

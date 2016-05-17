@@ -7,5 +7,7 @@
         public string realisateur;
 
         public string titre { get; set; }
+
+        public string adresse_complete { get; set; }
     }
 }

@@ -4,7 +4,7 @@ angular.module('app.tourScenes', [])
     $scope.load = function () {
       tourScenesService.getTour($stateParams.theme).then(function(scenes) {
         
-        scenes.scenes = scenes;
+        $scope.scenes = scenes;
       })
     };
    
